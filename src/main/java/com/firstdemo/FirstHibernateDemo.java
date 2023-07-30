@@ -1,16 +1,26 @@
 package com.firstdemo;
 
+import java.util.ArrayList;
+import java.util.List;import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.NativeQuery;
 
 public class FirstHibernateDemo {
      static void firstHibernateDemo() {
@@ -44,8 +54,120 @@ public class FirstHibernateDemo {
     	       System.out.println("===EOP===");
      }
      
+     
+     static void criteriaDemo() {
+    	 Configuration con=new Configuration();
+  	   SessionFactory sf = con.configure("hibernate.cfg.xml").buildSessionFactory();
+     	Session session = sf.openSession();
+     	   
+     	//   Criteria c = session.createCriteria(Student.class);
+  	     //  c.add(Restrictions.eq("studentId", 1));//select * from student_info1 where student_id=1;
+  	       
+  	     //Student obj= (Student) c.uniqueResult();
+  	     
+     // Criteria c = session.createCriteria(Student.class);
+ 	    //  c.add(Restrictions.eq("mark", 30));//select * from student_info1 where mark=30;
+     	//  List list = c.list();
+     	
+     	// Criteria c = session.createCriteria(Student.class);
+ 	   //  c.add(Restrictions.gt("mark", 35));//select * from  student_info1 where mark > 35;
+      // List list = c.list();
+     	
+     	 Criteria c = session.createCriteria(Student.class);
+     	 Criterion aa=Restrictions.ilike("studentName","%Z");
+ 	     c.add(aa);//select * from  student_info1 where mark > 35;
+       List list = c.list();
+  	   // System.out.println("list==="+list);
+  	    
+  	   Criteria c1 = session.createCriteria(Student.class);
+  	 Criterion markc=Restrictions.eq("mark",30);
+  	 Criterion namec=Restrictions.eq("studentName","xyz");
+  	   c1.add(Restrictions.and(markc,namec));
+  	 List list1 = c1.list();
+	    System.out.println("list1==="+list1);
+     }
+     
+     static void projectionsDemo() {
+    	 Configuration con=new Configuration();
+    	   SessionFactory sf = con.configure("hibernate.cfg.xml").buildSessionFactory();
+       	Session session = sf.openSession();
+       	
+       	    Criteria c  =session.createCriteria(Student.class);
+       	    
+       	  //  c.setProjection(Projections.rowCount());//select count(*)  from student_info1;
+       	  // Long count = (Long) c.uniqueResult();
+       	  // System.out.println("count==="+count);
+       	   
+       	 //  c.setProjection(Projections.max("mark"));//select max(mark) from student_info1;
+       	// int maxMark=(int) c.uniqueResult();
+       //	 System.out.println("maxMark==="+maxMark);
+       	 
+         
+     	 //  c.setProjection(Projections.min("mark"));
+     	// int minMark=(int) c.uniqueResult();
+     	// System.out.println("minMark==="+minMark);
+     	 
+     	 // c.setProjection(Projections.sum("mark"));
+      	// Long sumMark=(Long) c.uniqueResult();
+      	// System.out.println("sumMark==="+sumMark);
+      	 
+      	// c.setProjection(Projections.avg("mark"));
+      	// double avgMark=(double) c.uniqueResult();
+      	// System.out.println("avgMark==="+avgMark);
+      	 
+      	 // Projection  p=Projections.property("studentName");//select student_name from student_info1;
+      	// Projection  markp=Projections.property("mark");
+      	//  c.setProjection(p);
+      	//c.setProjection(markp);
+      	// List list = c.list();
+      	 //System.out.println("list===="+list);
+      	 
+      	 c.addOrder(Order.desc("mark"));
+      	 List list1 = c.list();
+      	 System.out.println("Desc list===="+list1);
+      	 
+      	 c.setFirstResult(0);// kutun start krayche (kontya index pasun)
+      	 c.setMaxResults(3);// kiti record pahijet
+      	 
+      	List list2 = c.list();
+     	 System.out.println(" list2===="+list2);
+       	      
+     }
+     
+     static void display() {
+    	 Emp e1=new Emp(1,"AA", "IT", 2000);
+    	 Emp e2=new Emp(2,"AB", "Account", 5000);
+    	 Emp e3=new Emp(3,"AC", "Finance", 4000);
+    	 Emp e4=new Emp(4,"AD", "IT", 3000);
+    	 
+    	 List<Emp> list=new ArrayList<Emp>();
+    	  list.add(e1);
+    	  list.add(e2);
+    	  list.add(e3);
+    	  list.add(e4);
+    	  
+    	  List<Emp> list1=new ArrayList<Emp>();
+    	  for(Emp obj:list) {
+    		  if(obj.getDept().equalsIgnoreCase("IT")) {
+    			  //obj.setSalary(obj.getSalary()+5000);
+    			   double increSalary=obj.getSalary()+5000;
+    			   obj.setSalary(increSalary);
+    			  list1.add(obj) ;
+    		  }else {
+    			  list1.add(obj) ;
+    		  }
+    	  }
+    	  
+    	  
+    	  System.out.println("After Increment Salary===="+list1);
+    	 
+    	  
+     }
+     
      public static void main(String[] args) {
-    	 firstHibernateDemo();
+    	// firstHibernateDemo();
+    	 projectionsDemo();
+    	 //display();
 	}
 }
 
@@ -102,6 +224,58 @@ class Student{
 		this.mark = mark;
 	}
 	
+	
+	
+	
+}
+
+class Emp{
+	
+	int empId;
+	String empName;
+	String dept;
+	double salary;
+	public int getEmpId() {
+		return empId;
+	}
+	public void setEmpId(int empId) {
+		this.empId = empId;
+	}
+	public String getEmpName() {
+		return empName;
+	}
+	public void setEmpName(String empName) {
+		this.empName = empName;
+	}
+	public String getDept() {
+		return dept;
+	}
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+	public double getSalary() {
+		return salary;
+	}
+	public void setSalary(double salary) {
+		this.salary = salary;
+	}
+	@Override
+	public String toString() {
+		return "Emp [empId=" + empId + ", empName=" + empName + ", dept=" + dept + ", salary=" + salary + "]\n";
+	}
+	/**
+	 * @param empId
+	 * @param empName
+	 * @param dept
+	 * @param salary
+	 */
+	public Emp(int empId, String empName, String dept, double salary) {
+		super();
+		this.empId = empId;
+		this.empName = empName;
+		this.dept = dept;
+		this.salary = salary;
+	}
 	
 	
 	
