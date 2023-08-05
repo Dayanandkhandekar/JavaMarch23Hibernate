@@ -14,11 +14,25 @@
 
     <!--property name="dialect">org.hibernate.dialect.MySQLDialect</property-->
      <property name="hbm2ddl.auto">update</property>
-    <!-- <property name="current_session_context_class">thread</property> -->
+    <property name="current_session_context_class">thread</property> 
     <property name="show_sql">true</property>
     <property name="format_sql">true</property>
-
+    	 <property name="hibernate.cache.use_second_level_cache">true</property>
+ <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+		
+		<!-- For singleton factory -->
+		 <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</property>
     <!-- mapping class="com.mcnz.jpa.examples.Player" / -->
     <mapping class="com.firstdemo.Student"/>
+     <mapping class="com.inhritancedemo.Emp"/>
+      <mapping class="com.inhritancedemo.PEmp"/>
+       <mapping class="com.inhritancedemo.CEmp"/>
+        <mapping class="com.inhritancedemo.Emp1"/>
+      <mapping class="com.inhritancedemo.PEmp1"/>
+       <mapping class="com.inhritancedemo.CEmp1"/>
+        <mapping class="com.inhritancedemo.CEmp"/>
+        <mapping class="com.inhritancedemo.Emp2"/>
+      <mapping class="com.inhritancedemo.PEmp2"/>
+       <mapping class="com.inhritancedemo.CEmp2"/>
   </session-factory>
 </hibernate-configuration>

@@ -14,6 +14,8 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
@@ -85,6 +87,12 @@ public class FirstHibernateDemo {
   	   c1.add(Restrictions.and(markc,namec));
   	 List list1 = c1.list();
 	    System.out.println("list1==="+list1);
+	    
+	    Criteria cc = session.createCriteria(Student.class);
+	    cc.add(Restrictions.ge("mark", 30));
+	    cc.add(Restrictions.le("mark", 40));
+	    List listGe = cc.list();
+	    System.out.println("listGe==="+listGe);
      }
      
      static void projectionsDemo() {
@@ -164,15 +172,33 @@ public class FirstHibernateDemo {
     	  
      }
      
+     static void cacheDemo() {
+    	 Configuration con=new Configuration();
+    	   SessionFactory sf = con.configure("hibernate.cfg.xml").buildSessionFactory();
+       	Session session = sf.openSession();
+       	
+      Student   s1=	session.get(Student.class,1);
+      System.out.println("s1====="+s1);
+      Student   s2=	session.get(Student.class,1);
+      System.out.println("s2====="+s2);
+     
+   	Session session2 = sf.openSession();
+    Student   s5=	session2.get(Student.class,1);
+    System.out.println("s5====="+s5);
+       	
+     }
+     
      public static void main(String[] args) {
     	// firstHibernateDemo();
-    	 projectionsDemo();
+    	 //projectionsDemo();
+    	 cacheDemo();
     	 //display();
 	}
 }
 
 @Entity
 @Table(name="STUDENT_INFO1")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 class Student{
 	
 	@Id// to define the primary key in hibernate
