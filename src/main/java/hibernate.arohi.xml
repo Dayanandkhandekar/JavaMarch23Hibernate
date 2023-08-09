@@ -30,5 +30,17 @@
     <mapping class="com.arohipgm.Employee1"/>
     <mapping class="com.arohipgm.Product"/>
     <mapping class="com.arohipgm.Person"/>
+    
+    <mapping class="com.arohipgm.Employee"/>
+    <mapping class="com.arohipgm.Pemp"/>
+    <mapping class="com.arohipgm.Cemp"/>
+    
+    <mapping class="com.arohipgm.Emp12"/>
+    <mapping class="com.arohipgm.pemp12"/>
+    <mapping class="com.arohipgm.cemp12"/>
+    
+    <mapping class="com.arohipgm.Emp34"/>
+    <mapping class="com.arohipgm.pEmp34"/>
+    <mapping class="com.arohipgm.cEmp34"/>
     </session-factory>
 </hibernate-configuration>
