@@ -42,5 +42,7 @@
     <mapping class="com.arohipgm.Emp34"/>
     <mapping class="com.arohipgm.pEmp34"/>
     <mapping class="com.arohipgm.cEmp34"/>
+    
+    <mapping class="com.arohipgm.Emp"/>
     </session-factory>
 </hibernate-configuration>
